@@ -1,0 +1,42 @@
+
+"""
+Create a Wordcloud image
+
+final project of Coursera
+"""
+
+
+
+
+from matplotlib import pyplot as plt
+import wordcloud
+word={}  
+n=1
+
+sp="Internet of things is a forthcoming technology that takes benefit of internet to control or monitor devices, automobiles and other physical things associated to the internet. IOT provides users the capability to control more than digital things facilely over the cyber world. Increasingly investigators and inventors focuses on researching innovative IOT projects that could benefit the human beings and the society. From the literature review and the case study, it can be concluded that the experts all consent that the IOT will have generously huge impacts on the future. But how astronomically immense this impact will be is still a question. From the literature review, it already show that the connected customer experience is critical for the companies and the companies can make advantage of these data in the Incipient Product Development. And from the literature, it is concluded that the marketing power of the IOT is connectivity for better customer interactivity. As of mutual literature review and the case study, it can show that the IOT technology is introduced in the products. From the case study, it validates the theory in the literature review that digitalization and the IOT will dispense long term efficiencies and magnification opportunities in industries. And it withal substantiates that the companies could receive tremendous volume of the data from the customers. Ergo, the marketing power of the Internet of Things is connectivity for better customer interactivity. Albeit the technology of IOT is still developing, a plethora of pioneers in the market already commenced to utilize this incipient technology. The current IOT projects have been proposed on subsisting system amendments and incipient innovative solutions to different quandaries. With the emerging possibility of connecting more and more hardware to the cyber world, IOT researches are never ending and it will benefit to the mankind more and more in the future. It is exhilarating to visually perceive how the world will be transmuted by IOT."
+
+def calculate_frequencies(file_contents):
+    # Here is a list of punctuations and uninteresting words you can use to process your text
+    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+    uninteresting_words = ["the", "a", "to", "if", "is", "it", "of", "and", "or", "an", "as", "i", "me", "my", \
+    "we", "our", "ours", "you", "your", "yours", "he", "she", "him", "his", "her", "hers", "its", "they", "them", \
+    "their", "what", "which", "who", "whom", "this", "that", "am", "are", "was", "were", "be", "been", "being", \
+    "have", "has", "had", "do", "does", "did", "but", "at", "by", "with", "from", "here", "when", "where", "how", \
+    "all", "any", "both", "each", "few", "more", "some", "such", "no", "nor", "too", "very", "can", "will", "just"]
+        
+    for item in sp.split(" "):
+        if item.isalpha():
+            if item not in uninteresting_words:
+                if item not in word:
+                    word[item.lower()] = n
+                else:
+                    word[item.lower()] += n
+    cloud = wordcloud.WordCloud()
+    cloud.generate_from_frequencies(word)
+    return cloud.to_array()
+
+myimage = calculate_frequencies(sp)
+print(myimage)
+plt.imshow(myimage, interpolation = 'nearest')
+plt.axis('off')
+plt.show()
