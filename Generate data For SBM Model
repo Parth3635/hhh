@@ -1,0 +1,82 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May 30 17:37:09 2022
+
+@author: Parths
+"""
+
+import json
+import random
+import time
+import requests
+# import numpy as np
+import pandas as pd
+# from sklearn.linear_model import LinearRegression
+from requests.structures import CaseInsensitiveDict
+
+endTs = 1651375800000
+data1=[]
+def read_config(filename):
+    try:
+        with open(filename)as f:
+            config = json.load(f)
+            print("Config File Read")
+        return config
+    except:
+        print("Issue In Config File")
+        
+def get_thingsboard_token(thingsboard_ip, username, password):
+    headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    }
+    data = '{"username":"'+username+'", "password":"'+password+'"}'
+    response = requests.post('http://'+thingsboard_ip+'/api/auth/login', headers=headers, data=data)
+    token = response.json()['token']
+    # o("Thingsboard Token Generated")
+    return token
+
+def vib_data():
+    return round(random.uniform(0.5, 4.5),3)
+def temp():
+    return round(random.uniform(30, 50),3)
+def noise():
+    return round(random.uniform(90, 120),3)
+
+def payload_preparation():
+    data                                                                                = {}
+    data['ts']                                                                          = endTs
+    data["values"]                                                                      = {}
+    data["values"]["x_rms_acl"]                                                                   = vib_data()
+    data["values"]["y_rms_acl"]                                                                   = vib_data()
+    data["values"]["z_rms_acl"]                                                                   = vib_data()
+    data["values"]["x_rms_vel"]                                                                   = vib_data()
+    data["values"]["y_rms_vel"]                                                                   = vib_data()
+    data["values"]["z_rms_vel"]                                                                   = vib_data()
+    data["values"]["temp_c"]                                                                      = temp()
+    data["values"]["SPL_dB"]                                                                      = noise()
+    return data
+def Post_Telemetry(token,thingsboard_ip, device_id,Payload):
+    headers = CaseInsensitiveDict()
+    headers["Content-Type"] = "application/json"
+    headers["Accept"] = "*/*"
+    headers["X-Authorization"] = f"bearer {token}"
+    url = f"http://{thingsboard_ip}/api/plugins/telemetry/DEVICE/{device_id}/timeseries/ANY?scope=ANY"
+    data_json = json.dumps(Payload)
+    resp = requests.post(url, headers=headers, data=data_json)
+    return (resp.status_code)
+i=0
+config = read_config("Config.json")
+token=get_thingsboard_token(config['thingsboard_ip'], config['username'], config['password'])
+
+# print(payload_preparation())
+
+while i < 43201:
+    data1=payload_preparation()
+    Post_Telemetry(token,config['thingsboard_ip'],config['device_id'][0] ,data1)
+    time.sleep(2)
+    i +=1
+    endTs += 30000
+    
+
+    
