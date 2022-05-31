@@ -79,4 +79,34 @@ while i < 43201:
     endTs += 30000
     
 
+
+
+
+
+-------------------------------------------------Config File----------------------------------------------
+Name Config.json
+
+
+{
+    "tenant" : ["qatest"],
+    "username": "qatest@cimcon.com",
+    "password": "cimcon",
+    "device_id" : ["ad2583f0-738e-11ec-8e24-0b136a7dfdc6"],
+    "startTs" : 1651375800000,
+    "parameter" : [  "x_rms_acl",
+                      "y_rms_acl",
+                      "z_rms_acl",
+                      "x_rms_vel",
+                      "y_rms_vel",
+                      "z_rms_vel",
+                      "temp_c",
+                      "SPL_dB"],
+    "thingsboard_ip": "203.88.135.128:8080"
+}
+
+
+
+
+
+
     
